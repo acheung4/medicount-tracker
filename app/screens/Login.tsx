@@ -13,7 +13,6 @@ export default function Login() {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log(response);
         }
         catch (error: any) {
             console.log(error);
@@ -21,6 +20,8 @@ export default function Login() {
         }
         finally {
             setLoading(false);
+            setEmail('');
+            setPassword('');
         }
     }
 
@@ -28,7 +29,6 @@ export default function Login() {
         setLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(response);
             alert("Registration successful!");
         }
         catch (error: any) {
@@ -37,6 +37,8 @@ export default function Login() {
         }
         finally {
             setLoading(false);
+            setEmail('');
+            setPassword('');
         }
     }
 

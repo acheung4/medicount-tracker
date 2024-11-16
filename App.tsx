@@ -25,9 +25,14 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      setUser(user);
+    onAuthStateChanged(FIREBASE_AUTH, (newUser) => {
+      setUser(newUser);    
     })
+
+    // if (user) {
+    //   console.log(FIREBASE_AUTH.currentUser?.uid);
+    // }
+
   }, [])
 
   return (
