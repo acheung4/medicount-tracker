@@ -1,22 +1,25 @@
 import { View, TextInput, StyleSheet, ActivityIndicator, Button } from 'react-native';
 import { useState } from 'react';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-export default function Login({ navigation }: any) {
+export default function Register({ navigation }: any) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const auth = FIREBASE_AUTH;
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
         setLoading(true);
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            await createUserWithEmailAndPassword(auth, email, password);
+            FIREBASE_AUTH.signOut();
+            navigation.navigate('Login');
+            alert("Registration successful!");
         }
         catch (error: any) {
             console.log(error);
-            alert("Log in failed: " + error.message);
+            alert("Register failed: " + error.message);
         }
         finally {
             setLoading(false);
@@ -33,8 +36,8 @@ export default function Login({ navigation }: any) {
             {loading ? <ActivityIndicator size="large" color="#0000ff" />
                 :
                 <View>
-                    <Button title="Login" onPress={handleLogin} />
-                    <Button onPress={() => navigation.navigate('Register')} title="No account? Register" />
+                    <Button title="Register" onPress={handleRegister} />
+                    <Button onPress={() => navigation.navigate('Login')} title="Already have an account? Login" />
                 </View>
             }
         </View>

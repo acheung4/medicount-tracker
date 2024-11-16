@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 
 
-const Medications = ({ navigation }: any) => {
+const Medications = () => {
     const [medications, setMedications] = useState<any[]>([]);
 
     useEffect(() => {
@@ -47,7 +47,6 @@ const Medications = ({ navigation }: any) => {
             )}
 
 
-            <Button onPress={() => navigation.navigate('Search')} title="Search" />
             <Button onPress={() => FIREBASE_AUTH.signOut()} title="Log Out" />
         </View>
     );
