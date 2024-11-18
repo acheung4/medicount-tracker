@@ -1,10 +1,24 @@
 import { View, Text, Button, FlatList, StyleSheet } from "react-native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
+import PrescriptionDetails from "./PrescriptionDetails";
+import UpdatePrescription from "./UpdatePrescription";
 
+const MedicationStack = createNativeStackNavigator();
 
-const Medications = () => {
+export default function Medications() {
+    return (
+        <MedicationStack.Navigator initialRouteName="MedicationList">
+            <MedicationStack.Screen name="MedicationList" component={MedicationList} />
+            <MedicationStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} />
+            <MedicationStack.Screen name="UpdatePrescription" component={UpdatePrescription} />
+        </MedicationStack.Navigator>
+    );
+}
+
+const MedicationList = () => {
     const [medications, setMedications] = useState<any[]>([]);
 
     useEffect(() => {
@@ -51,8 +65,6 @@ const Medications = () => {
         </View>
     );
 };
-
-export default Medications;
 
 const styles = StyleSheet.create({
     card: {

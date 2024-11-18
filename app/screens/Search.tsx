@@ -1,61 +1,78 @@
-import { Button, TextInput, View, StyleSheet, Text } from "react-native";
+import { Button, TextInput, View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { addDoc, collection } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useState } from 'react';
+import axios from 'axios';
+import AddMedicationForm from "./AddMedicationForm";
+
+const SearchStack = createNativeStackNavigator();
 
 export default function Search() {
+    return (
+        <SearchStack.Navigator initialRouteName="SearchMedications">
+            <SearchStack.Screen name="SearchMedications" component={SearchMedications} options={{ headerShown: false }}/>
+            <SearchStack.Screen name="AddMedicationForm" component={AddMedicationForm} />
+        </SearchStack.Navigator>
+    );
+}
 
-    const [data, setData] = useState({
-        name: "",
-        dosage: "",
-        quantity: "",
-        signature: "",
-        prescriber: ""
-    });
+function SearchMedications({ navigation }: any) {
 
-    const handleChange = (value: any, name: string) => {
-        setData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
-    }
+    const [data, setData] = useState<any[]>([]);
+    const [query, setQuery] = useState("");
 
-    const addMedication = async () => {
+    const retrieveData = async () => {
         try {
-            const formattedData = {
-                name: data.name,
-                dosage: Number(data.dosage),
-                quantity: Number(data.quantity),
-                signature: data.signature,
-                prescriber: data.prescriber
-            };
+            const response = await axios.get(`https://api.fda.gov/drug/drugsfda.json?search=openfda.generic_name:%22${query}%22+search=openfda.brand_name%22${query}%22&limit=10`);
+            const productList = response.data.results.map((entry: any) => entry.products);
 
-            await addDoc(collection(FIREBASE_DB, "users", String(FIREBASE_AUTH.currentUser?.uid), "medications"), formattedData);
+            const drugs: any[] = [];
+
+            for (const productArray of productList) {
+                productArray.forEach((product: any) => {
+                    if (product.active_ingredients.length == 1) {
+                        drugs.push(product.active_ingredients[0]);
+                    }
+                });
+            }
+
+            //removes duplicates
+            var uniqueDrugs = drugs.filter((drug, index, self) =>
+                index === self.findIndex((t) => (t.name === drug.name && t.strength === drug.strength)));
+
+            console.log(uniqueDrugs);
+            setData(uniqueDrugs);
+
         }
         catch (error) {
             console.error(error);
         }
     }
 
+    const medicationResult = ({ item }: any) => {
+        return (
+            <TouchableOpacity style={styles.result} onPress={() => navigation.navigate("AddMedicationForm")}>
+                <Text>{item.name}</Text>
+                <Text>{item.strength}</Text>
+            </TouchableOpacity>
+        );
+    }
+
     return (
-        <View style={styles.container} >
-            <View style={styles.form}>
-                <Text>Drug Name</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "name")} value={data.name} placeholder="Drug Name" />
+        <View style={styles.container}>
+            <View style={styles.search}>
+                <TextInput style={styles.input} onChangeText={(text) => setQuery(text)} value={query} placeholder="Enter drug name" />
+                <Button title="Search" onPress={retrieveData} />
+            </View>
 
-                <Text>Dosage</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "dosage")} keyboardType="numeric" value={data.dosage} placeholder="0" />
-
-                <Text>Quantity</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />
-
-                <Text>Signature</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "signature")} value={data.signature} placeholder="Signature" />
-
-                <Text>Prescriber</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "prescriber")} value={data.prescriber} placeholder="Prescriber Name" />
-
-                <Button onPress={() => addMedication()} title="Add Medication" />
+            <View>
+                {data.length > 0 && (
+                    <FlatList
+                        data={data}
+                        renderItem={medicationResult}
+                    />
+                )}
             </View>
         </View>
     );
@@ -65,9 +82,10 @@ const styles = StyleSheet.create({
     container: {
         marginHorizontal: 20,
     },
-    form: {
+    search: {
         marginVertical: 10,
         marginHorizontal: 4,
+        flexDirection: "row"
     },
     input: {
         marginVertical: 10,
@@ -75,6 +93,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         padding: 10,
+        flex: 1,
         backgroundColor: '#fff'
+    },
+    result: {
+        backgroundColor: 'orange',
+        marginVertical: 5,
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 5,
+        textAlign: 'center'
     }
 });
