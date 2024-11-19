@@ -1,24 +1,22 @@
-import { View, Text, Button, FlatList, StyleSheet } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import PrescriptionDetails from "./PrescriptionDetails";
-import UpdatePrescription from "./UpdatePrescription";
 
 const MedicationStack = createNativeStackNavigator();
 
 export default function Medications() {
     return (
         <MedicationStack.Navigator initialRouteName="MedicationList">
-            <MedicationStack.Screen name="MedicationList" component={MedicationList} />
-            <MedicationStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} />
-            <MedicationStack.Screen name="UpdatePrescription" component={UpdatePrescription} />
+            <MedicationStack.Screen name="MedicationList" component={MedicationList} options={{ title: "Medication List" }} />
+            <MedicationStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: "Prescription Details" }} />
         </MedicationStack.Navigator>
     );
 }
 
-const MedicationList = () => {
+const MedicationList = ({ navigation }: any) => {
     const [medications, setMedications] = useState<any[]>([]);
 
     useEffect(() => {
@@ -43,10 +41,10 @@ const MedicationList = () => {
 
     const medicationDetails = ({ item }: any) => {
         return (
-            <View style={styles.card}>
-                <Text>{item.id}</Text>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PrescriptionDetails", { id: item.id })}>
                 <Text>{item.name}</Text>
-            </View>
+                <Text>{item.strength}</Text>
+            </TouchableOpacity>
         );
     }
 
@@ -59,9 +57,6 @@ const MedicationList = () => {
                     keyExtractor={(medication) => medication.id}
                 />
             )}
-
-
-            <Button onPress={() => FIREBASE_AUTH.signOut()} title="Log Out" />
         </View>
     );
 };

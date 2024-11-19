@@ -3,11 +3,13 @@ import { addDoc, collection } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useState } from 'react';
 
-export default function AddMedicationForm() {
+export default function AddMedicationForm({ route }: any ) {
+
+    const { name, strength } = route.params;
 
     const [data, setData] = useState({
-        name: "",
-        dosage: "",
+        name: name,
+        strength: strength,
         quantity: "",
         signature: "",
         prescriber: ""
@@ -24,12 +26,13 @@ export default function AddMedicationForm() {
         try {
             const formattedData = {
                 name: data.name,
-                dosage: Number(data.dosage),
+                strength: data.strength,
                 quantity: Number(data.quantity),
                 signature: data.signature,
                 prescriber: data.prescriber
             };
 
+            console.log(formattedData);
             await addDoc(collection(FIREBASE_DB, "users", String(FIREBASE_AUTH.currentUser?.uid), "medications"), formattedData);
         }
         catch (error) {
@@ -41,10 +44,10 @@ export default function AddMedicationForm() {
         <View style={styles.container} >
             <View style={styles.form}>
                 <Text>Drug Name</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "name")} value={data.name} placeholder="Drug Name" />
+                <TextInput style={styles.inputDisabled} editable={false} value={data.name} placeholder="Drug Name" />
 
-                <Text>Dosage</Text>
-                <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "dosage")} keyboardType="numeric" value={data.dosage} placeholder="0" />
+                <Text>Strength</Text>
+                <TextInput style={styles.inputDisabled} editable={false} value={data.strength} placeholder="0" />
 
                 <Text>Quantity</Text>
                 <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />
@@ -76,5 +79,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         backgroundColor: '#fff'
+    },
+    inputDisabled: {
+        marginVertical: 10,
+        height: 35,
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        backgroundColor: '#a6a6a6'
     }
 });

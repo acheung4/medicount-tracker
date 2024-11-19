@@ -11,8 +11,8 @@ const SearchStack = createNativeStackNavigator();
 export default function Search() {
     return (
         <SearchStack.Navigator initialRouteName="SearchMedications">
-            <SearchStack.Screen name="SearchMedications" component={SearchMedications} options={{ headerShown: false }}/>
-            <SearchStack.Screen name="AddMedicationForm" component={AddMedicationForm} />
+            <SearchStack.Screen name="SearchMedications" component={SearchMedications} options={{ title: "Search" }} />
+            <SearchStack.Screen name="AddMedicationForm" component={AddMedicationForm} options={{ title: "Add Medication" }} />
         </SearchStack.Navigator>
     );
 }
@@ -52,7 +52,7 @@ function SearchMedications({ navigation }: any) {
 
     const medicationResult = ({ item }: any) => {
         return (
-            <TouchableOpacity style={styles.result} onPress={() => navigation.navigate("AddMedicationForm")}>
+            <TouchableOpacity style={styles.result} onPress={() => navigation.navigate("AddMedicationForm", { name: item.name, strength: item.strength })}>
                 <Text>{item.name}</Text>
                 <Text>{item.strength}</Text>
             </TouchableOpacity>
@@ -85,7 +85,8 @@ const styles = StyleSheet.create({
     search: {
         marginVertical: 10,
         marginHorizontal: 4,
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     },
     input: {
         marginVertical: 10,
