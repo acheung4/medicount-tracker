@@ -3,7 +3,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useState } from 'react';
 
-export default function AddMedicationForm({ route }: any ) {
+export default function AddMedicationForm({ route, navigation }: any ) {
 
     const { name, strength } = route.params;
 
@@ -20,6 +20,7 @@ export default function AddMedicationForm({ route }: any ) {
             ...prevData,
             [name]: value
         }));
+        console.log(route.params);
     }
 
     const addMedication = async () => {
@@ -51,6 +52,7 @@ export default function AddMedicationForm({ route }: any ) {
 
                 <Text>Quantity</Text>
                 <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />
+                <Button onPress={() => navigation.navigate("PillCounter")} title="Count pills" />
 
                 <Text>Signature</Text>
                 <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "signature")} value={data.signature} placeholder="Signature" />

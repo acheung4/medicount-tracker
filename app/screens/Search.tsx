@@ -1,10 +1,9 @@
 import { Button, TextInput, View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { addDoc, collection } from "firebase/firestore";
-import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useState } from 'react';
 import axios from 'axios';
 import AddMedicationForm from "./AddMedicationForm";
+import PillCounter from "./PillCounter";
 
 const SearchStack = createNativeStackNavigator();
 
@@ -12,7 +11,18 @@ export default function Search() {
     return (
         <SearchStack.Navigator initialRouteName="SearchMedications">
             <SearchStack.Screen name="SearchMedications" component={SearchMedications} options={{ title: "Search" }} />
-            <SearchStack.Screen name="AddMedicationForm" component={AddMedicationForm} options={{ title: "Add Medication" }} />
+            <SearchStack.Screen
+                name="AddMedicationForm"
+                component={AddMedicationForm}
+                options={{
+                    title: "Add Medication",
+                    // headerLeft: () => (
+                    //     <Button title="Search" onPress={({navigation}: any) => navigation.navigate('Search')}></Button>
+                    // ),
+                    // headerBackVisible: true,
+                    // headerBackTitle: 'Back',
+                }} />
+            <SearchStack.Screen name="PillCounter" component={PillCounter} options={{ title: "Pill Counter" }} />
         </SearchStack.Navigator>
     );
 }
@@ -41,7 +51,6 @@ function SearchMedications({ navigation }: any) {
             var uniqueDrugs = drugs.filter((drug, index, self) =>
                 index === self.findIndex((t) => (t.name === drug.name && t.strength === drug.strength)));
 
-            console.log(uniqueDrugs);
             setData(uniqueDrugs);
 
         }
