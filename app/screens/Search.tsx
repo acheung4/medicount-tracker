@@ -14,14 +14,8 @@ export default function Search() {
             <SearchStack.Screen
                 name="AddMedicationForm"
                 component={AddMedicationForm}
-                options={{
-                    title: "Add Medication",
-                    // headerLeft: () => (
-                    //     <Button title="Search" onPress={({navigation}: any) => navigation.navigate('Search')}></Button>
-                    // ),
-                    // headerBackVisible: true,
-                    // headerBackTitle: 'Back',
-                }} />
+                options={{ title: "Add Medication" }}
+            />
             <SearchStack.Screen name="PillCounter" component={PillCounter} options={{ title: "Pill Counter" }} />
         </SearchStack.Navigator>
     );
@@ -34,7 +28,7 @@ function SearchMedications({ navigation }: any) {
 
     const retrieveData = async () => {
         try {
-            const response = await axios.get(`https://api.fda.gov/drug/drugsfda.json?search=openfda.generic_name:%22${query}%22+search=openfda.brand_name%22${query}%22&limit=10`);
+            const response = await axios.get(`https://api.fda.gov/drug/drugsfda.json?search=openfda.generic_name:%22${query}%22+openfda.brand_name:%22${query}%22&limit=10`);
             const productList = response.data.results.map((entry: any) => entry.products);
 
             const drugs: any[] = [];

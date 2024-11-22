@@ -3,7 +3,7 @@ import { getDoc, updateDoc, collection, doc } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useState, useEffect } from 'react';
 
-export default function PrescriptionDetails({ route }: any) {
+export default function PrescriptionDetails({ route, navigation }: any) {
 
     const { id } = route.params;
 
@@ -38,6 +38,20 @@ export default function PrescriptionDetails({ route }: any) {
             [name]: value
         }));
     }
+
+    const navigateToCounter = () => {
+        navigation.navigate('PillCounter', {
+            onGoBack: (count: number) => {
+
+                // Callback function to extract pill count
+                setData((prevData: any) => ({
+                    ...prevData,
+                    ["quantity"]: count.toString()
+                }));
+
+            },
+        });
+    };
 
     const updateMedication = async () => {
         setIsEditing(false);
@@ -78,11 +92,14 @@ export default function PrescriptionDetails({ route }: any) {
 
                 <Text>Quantity</Text>
                 {isEditing ?
-                    (<TextInput style={styles.input} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />)
+                    <View>
+                        <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />
+                        <Button onPress={navigateToCounter} title="Count pills" />
+                    </View>
                     :
                     <Text>{data.quantity}</Text>
                 }
-                
+
 
                 <Text>Signature</Text>
                 {isEditing ?
@@ -90,7 +107,7 @@ export default function PrescriptionDetails({ route }: any) {
                     :
                     <Text>{data.signature}</Text>
                 }
-                
+
 
                 <Text>Prescriber</Text>
                 {isEditing ?

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
-export default function PillCounter({ navigation }: any) {
+export default function PillCounter({ navigation, route }: any) {
 
   const [image, setImage] = useState<any>(null);
   const [count, setCount] = useState<number | null>(null);
@@ -73,7 +73,8 @@ export default function PillCounter({ navigation }: any) {
   }
 
   const sendCountBack = () => {
-    navigation.navigate('AddMedicationForm', { ...navigation, modelCount: count });
+    route.params.onGoBack(count);
+    navigation.goBack();
   }
 
   return (

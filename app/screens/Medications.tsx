@@ -4,6 +4,7 @@ import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import PrescriptionDetails from "./PrescriptionDetails";
+import PillCounter from "./PillCounter";
 
 const MedicationStack = createNativeStackNavigator();
 
@@ -12,6 +13,7 @@ export default function Medications() {
         <MedicationStack.Navigator initialRouteName="MedicationList">
             <MedicationStack.Screen name="MedicationList" component={MedicationList} options={{ title: "Medication List" }} />
             <MedicationStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: "Prescription Details" }} />
+            <MedicationStack.Screen name="PillCounter" component={PillCounter} options={{ title: "Pill Counter" }} />
         </MedicationStack.Navigator>
     );
 }
