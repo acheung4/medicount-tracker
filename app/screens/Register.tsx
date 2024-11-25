@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, ActivityIndicator, Button } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ActivityIndicator, Pressable, Image } from 'react-native';
 import { useState } from 'react';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -29,15 +29,33 @@ export default function Register({ navigation }: any) {
     }
 
     return (
-        <View style={styles.container}>
-            <TextInput style={styles.input} value={email} placeholder="Email" onChangeText={(e) => setEmail(e)}></TextInput>
-            <TextInput style={styles.input} value={password} secureTextEntry={true} placeholder="Password" onChangeText={(e) => setPassword(e)}></TextInput>
 
-            {loading ? <ActivityIndicator size="large" color="#0000ff" />
+        <View style={styles.container}>
+
+            <Image
+                style={styles.image}
+                source={require('../../assets/favicon.png')}
+            />
+
+            <View style={styles.form}>
+                <Text style={styles.label}>Email</Text>
+                <TextInput style={styles.input} value={email} placeholder="Email" onChangeText={(e) => setEmail(e)}></TextInput>
+            </View>
+
+            <View style={styles.form}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput style={styles.input} value={password} secureTextEntry={true} placeholder="Password" onChangeText={(e) => setPassword(e)}></TextInput>
+            </View>
+
+            {loading ? <ActivityIndicator style={{marginTop: 75}} size="large" color='#fdc4b0' />
                 :
                 <View>
-                    <Button title="Register" onPress={handleRegister} />
-                    <Button onPress={() => navigation.navigate('Login')} title="Already have an account? Login" />
+                    <Pressable style={styles.button} onPress={handleRegister}>
+                        <Text style={styles.buttonText}>Register</Text>
+                    </Pressable>
+                    <Pressable style={{marginTop: 10, marginHorizontal:'auto' }} onPress={() => navigation.navigate('Login')}>
+                        <Text style={styles.loginText}>Already have an account? Login</Text>
+                    </Pressable>
                 </View>
             }
         </View>
@@ -47,18 +65,55 @@ export default function Register({ navigation }: any) {
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 20,
+        backgroundColor: '#7bb4ad',
         flex: 1,
         justifyContent: 'center'
     },
-
+    form: {
+        marginBottom: 8,
+        marginHorizontal: 24,
+        fontFamily: 'Poppins'
+    },
+    image: {
+        width: 175,
+        height: 175,
+        justifyContent: 'center',
+        marginHorizontal: 'auto'
+    },
+    label: {
+        fontFamily: 'Poppins-bold',
+        color: '#ddf0ed',
+        fontSize: 16,
+        marginLeft: 6,
+        marginBottom: 2
+    },
     input: {
-        marginVertical: 8,
-        marginHorizontal: 4,
+        fontFamily: 'Poppins',
         height: 50,
         borderWidth: 1,
         borderRadius: 15,
         padding: 10,
         backgroundColor: '#fff'
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 6,
+        paddingHorizontal: 4,
+        marginHorizontal: 'auto',
+        marginTop: 75,
+        width: 125,
+        borderRadius: 6,
+        backgroundColor: '#fdc4b0',
+      },
+    buttonText: {
+        fontFamily: 'Poppins-bold',
+        fontSize: 20,
+        color: 'white',
+    },
+    loginText: {
+        fontFamily: 'Poppins',
+        fontSize: 18,
+        color: 'white',
     }
 });
