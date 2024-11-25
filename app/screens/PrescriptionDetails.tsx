@@ -65,7 +65,6 @@ export default function PrescriptionDetails({ route, navigation }: any) {
                 prescriber: data.prescriber
             };
 
-            console.log(formattedData);
             await updateDoc(doc(FIREBASE_DB, "users", String(FIREBASE_AUTH.currentUser?.uid), "medications", id), formattedData);
         }
         catch (error) {

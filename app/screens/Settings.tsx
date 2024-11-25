@@ -1,8 +1,29 @@
-import { Button } from "react-native";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 export default function Settings() {
     return (
-        <Button onPress={() => FIREBASE_AUTH.signOut()} title="Log Out" />
+        <TouchableOpacity style={styles.button} onPress={() => FIREBASE_AUTH.signOut()}>
+            <Text style={styles.buttonText}>Log Out</Text>
+        </TouchableOpacity>
     );
 };
+
+const styles = StyleSheet.create({
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 6,
+        paddingHorizontal: 4,
+        marginHorizontal: 'auto',
+        marginTop: 25,
+        width: 100,
+        borderRadius: 6,
+        backgroundColor: '#59c3de',
+    },
+    buttonText: {
+        fontFamily: 'Poppins-bold',
+        fontSize: 20,
+        color: 'white',
+    }
+});

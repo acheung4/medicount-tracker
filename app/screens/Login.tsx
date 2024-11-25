@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, ActivityIndicator, Button, Image, Text, Pressable } from 'react-native';
+import { View, TextInput, StyleSheet, ActivityIndicator, Button, Image, Text, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -46,12 +46,12 @@ export default function Login({ navigation }: any) {
             {loading ? <ActivityIndicator style={{marginTop: 75}} size="large" color='#fdc4b0' />
                 :
                 <View>
-                    <Pressable style={styles.button} onPress={handleLogin}>
+                    <TouchableOpacity style={styles.button} onPress={handleLogin}>
                         <Text style={styles.buttonText}>Login</Text>
-                    </Pressable>
-                    <Pressable style={{marginTop: 10, marginHorizontal:'auto' }} onPress={() => navigation.navigate('Register')}>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginTop: 10, marginHorizontal:'auto' }} onPress={() => navigation.navigate('Register')}>
                         <Text style={styles.registerText}>No account? Register</Text>
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
             }
         </View>

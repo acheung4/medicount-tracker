@@ -10,13 +10,48 @@ const SearchStack = createNativeStackNavigator();
 export default function Search() {
     return (
         <SearchStack.Navigator initialRouteName="SearchMedications">
-            <SearchStack.Screen name="SearchMedications" component={SearchMedications} options={{ title: "Search" }} />
+            <SearchStack.Screen
+                name="SearchMedications"
+                component={SearchMedications}
+                options={{
+                    title: "Search",
+                    headerStyle: {
+                        backgroundColor: '#eb984b',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Poppins',
+                    },
+                }}
+            />
             <SearchStack.Screen
                 name="AddMedicationForm"
                 component={AddMedicationForm}
-                options={{ title: "Add Medication" }}
+                options={{
+                    title: "Add Medication",
+                    headerStyle: {
+                        backgroundColor: '#eb984b',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Poppins',
+                    },
+                }}
             />
-            <SearchStack.Screen name="PillCounter" component={PillCounter} options={{ title: "Pill Counter" }} />
+            <SearchStack.Screen
+                name="PillCounter"
+                component={PillCounter}
+                options={{
+                    title: "Pill Counter",
+                    headerStyle: {
+                        backgroundColor: '#eb984b',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Poppins',
+                    },
+                }}
+            />
         </SearchStack.Navigator>
     );
 }

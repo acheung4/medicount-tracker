@@ -11,9 +11,45 @@ const MedicationStack = createNativeStackNavigator();
 export default function Medications() {
     return (
         <MedicationStack.Navigator initialRouteName="MedicationList">
-            <MedicationStack.Screen name="MedicationList" component={MedicationList} options={{ title: "Medication List" }} />
-            <MedicationStack.Screen name="PrescriptionDetails" component={PrescriptionDetails} options={{ title: "Prescription Details" }} />
-            <MedicationStack.Screen name="PillCounter" component={PillCounter} options={{ title: "Pill Counter" }} />
+            <MedicationStack.Screen name="MedicationList"
+                component={MedicationList}
+                options={{
+                    title: "Medication List",
+                    headerStyle: {
+                        backgroundColor: '#eb984b',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Poppins',
+                    },
+                }}
+            />
+            <MedicationStack.Screen name="PrescriptionDetails" 
+                component={PrescriptionDetails} 
+                options={{
+                    title: "Prescription Details",
+                    headerStyle: {
+                        backgroundColor: '#eb984b',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Poppins',
+                    },
+                }}
+            />
+            <MedicationStack.Screen name="PillCounter" 
+                component={PillCounter} 
+                options={{
+                    title: "Pill Counter",
+                    headerStyle: {
+                        backgroundColor: '#eb984b',
+                    },
+                    headerTintColor: '#fff',
+                    headerTitleStyle: {
+                        fontFamily: 'Poppins',
+                    },
+                }}
+            />
         </MedicationStack.Navigator>
     );
 }
