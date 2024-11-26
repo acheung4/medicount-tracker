@@ -1,5 +1,5 @@
-import { Button, TextInput, View, StyleSheet, Text } from "react-native";
-import { getDoc, updateDoc, collection, doc } from "firebase/firestore";
+import { TextInput, View, StyleSheet, Text, Image, KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native";
+import { getDoc, updateDoc, doc } from "firebase/firestore";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../FirebaseConfig";
 import { useState, useEffect } from 'react';
 
@@ -74,52 +74,96 @@ export default function PrescriptionDetails({ route, navigation }: any) {
 
     return (
         <View style={styles.container} >
-            <View style={styles.form}>
-                <Text>Drug Name</Text>
-                {isEditing ?
-                    (<TextInput style={styles.input} onChangeText={(value) => handleChange(value, "name")} value={data.name} placeholder="Drug Name" />)
-                    :
-                    <Text>{data.name}</Text>
-                }
+            <KeyboardAvoidingView behavior='position'>
+                <ScrollView style={styles.form}>
 
-                <Text>Strength</Text>
-                {isEditing ?
-                    (<TextInput style={styles.input} onChangeText={(value) => handleChange(value, "strength")} value={data.strength} placeholder="0" />)
-                    :
-                    <Text>{data.strength}</Text>
-                }
+                    {isEditing ?
+                        (<View>
+                            <Text style={styles.title}>Drug Name</Text>
+                            <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "name")} value={data.name} placeholder="Drug Name" />
+                        </View>
+                        )
+                        :
+                        <View style={styles.item}>
+                            <Text style={[styles.title]}>Drug Name</Text>
+                            <Text style={styles.info}>{data.name}</Text>
+                        </View>
+                    }
 
-                <Text>Quantity</Text>
-                {isEditing ?
-                    <View>
-                        <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />
-                        <Button onPress={navigateToCounter} title="Count pills" />
-                    </View>
-                    :
-                    <Text>{data.quantity}</Text>
-                }
-
-
-                <Text>Signature</Text>
-                {isEditing ?
-                    (<TextInput style={styles.input} onChangeText={(value) => handleChange(value, "signature")} value={data.signature} placeholder="Signature" />)
-                    :
-                    <Text>{data.signature}</Text>
-                }
+                    {isEditing ?
+                        (<View>
+                            <Text style={styles.title}>Strength</Text>
+                            <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "strength")} value={data.strength} placeholder="0" />
+                        </View>
+                        )
+                        :
+                        <View style={styles.item}>
+                            <Text style={styles.title}>Strength</Text>
+                            <Text style={styles.info}>{data.strength}</Text>
+                        </View>
+                    }
 
 
-                <Text>Prescriber</Text>
-                {isEditing ?
-                    (<TextInput style={styles.input} onChangeText={(value) => handleChange(value, "prescriber")} value={data.prescriber} placeholder="Prescriber Name" />)
-                    :
-                    <Text>{data.prescriber}</Text>
-                }
-            </View>
-            {isEditing ? (
-                <Button onPress={() => updateMedication()} title="Save Changes" />
-            ) : (
-                <Button onPress={() => setIsEditing(true)} title="Edit Medication" />
-            )}
+                    {isEditing ?
+                        <View>
+                            <Text style={styles.title}>Quantity</Text>
+                            <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                                <TextInput style={[styles.input, { flex: 1 }]} onChangeText={(value) => handleChange(value, "quantity")} keyboardType="numeric" value={data.quantity} placeholder="0" />
+                                <TouchableOpacity style={styles.countButton} onPress={navigateToCounter}>
+                                    <Image
+                                        style={{ width: 25, height: 25 }}
+                                        source={require('../../assets/capsules.png')}
+                                    />
+                                    <Text style={{ fontSize: 20, fontFamily: 'Poppins' }}>Count</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        :
+                        <View style={styles.item}>
+                            <Text style={styles.title}>Quantity</Text>
+                            <Text style={styles.info}>{data.quantity}</Text>
+                        </View>
+                    }
+
+
+                    {isEditing ?
+                        (
+                            <View>
+                                <Text style={styles.title}>Signature</Text>
+                                <TextInput style={[styles.input, { height: 100 }]} multiline={true} numberOfLines={3} onChangeText={(value) => handleChange(value, "signature")} value={data.signature} placeholder="Signature" />
+                            </View>
+                        )
+                        :
+                        <View style={styles.item}>
+                            <Text style={styles.title}>Signature</Text>
+                            <Text style={styles.info}>{data.signature}</Text>
+                        </View>
+                    }
+
+
+                    {isEditing ?
+                        <View>
+                            <Text style={styles.title}>Prescriber</Text>
+                            <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "prescriber")} value={data.prescriber} placeholder="Prescriber Name" />
+                        </View>
+                        :
+                        <View style={styles.item}>
+                            <Text style={styles.title}>Prescriber</Text>
+                            <Text style={styles.info}>{data.prescriber}</Text>
+                        </View>
+                    }
+
+                    {isEditing ? (
+                        <TouchableOpacity style={styles.button} onPress={() => updateMedication()}>
+                            <Text style={styles.buttonText}>Save Changes</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+                            <Text style={styles.buttonText}>Edit Medication</Text>
+                        </TouchableOpacity>
+                    )}
+                </ScrollView>
+            </KeyboardAvoidingView>
         </View>
     );
 };
@@ -127,17 +171,62 @@ export default function PrescriptionDetails({ route, navigation }: any) {
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 20,
+        marginTop: 20
+    },
+    item: {
+        backgroundColor: '#9bc7c3',
+        borderRadius: 5,
+        marginBottom: 25,
+        padding: 10
+    },
+    info: {
+        fontFamily: 'Poppins',
+        fontSize: 15,
+        marginLeft: 4
     },
     form: {
-        marginVertical: 10,
-        marginHorizontal: 4,
+        height: 750
+    },
+    title: {
+        fontFamily: 'Poppins-bold',
+        fontSize: 20,
+        paddingLeft: 4
     },
     input: {
-        marginVertical: 10,
+        fontFamily: 'Poppins',
+        marginTop: 5,
+        marginBottom: 15,
         height: 35,
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 12,
         padding: 10,
         backgroundColor: '#fff'
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 6,
+        paddingHorizontal: 4,
+        marginHorizontal: 'auto',
+        marginTop: 50,
+        width: 175,
+        borderRadius: 6,
+        backgroundColor: '#fdc4b0',
+    },
+    buttonText: {
+        fontFamily: 'Poppins-bold',
+        fontSize: 20,
+        color: 'white',
+    },
+    countButton: {
+        flexDirection: "row",
+        alignItems: 'center',
+        marginBottom: 10,
+        borderWidth: 1,
+        borderRadius: 12,
+        paddingHorizontal: 5,
+        paddingVertical: 2,
+        marginLeft: 5,
+        backgroundColor: '#7bb4ad'
     }
 });

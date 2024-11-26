@@ -1,5 +1,6 @@
-import { View, Image, StyleSheet, Button, Text } from "react-native";
+import { View, Image, StyleSheet, Button, Text, TouchableOpacity } from "react-native";
 import { useState } from 'react';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 
@@ -79,26 +80,98 @@ export default function PillCounter({ navigation, route }: any) {
 
   return (
     <View>
-      <Button title="Camera" onPress={() => captureImage()} />
-      <Button title="Gallery" onPress={() => uploadImage()} />
-      {image ? (<Image source={{ uri: image }} style={styles.image} />) :
-        <Text>Upload image to get pill count.</Text>
-      }
+      <View style={styles.controlsContainer}>
+        <TouchableOpacity style={styles.control} onPress={() => captureImage()}>
+          <Ionicons name="camera-outline" size={32} color='#6a9fa8' />
+          <Text style={styles.controlText}>Camera</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.control} onPress={() => uploadImage()}>
+          <Ionicons name="image-outline" size={32} color='#6a9fa8' />
+          <Text style={styles.controlText}>Gallery</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.imageContainer}>
+        {image ? (<Image source={{ uri: image }} style={styles.image} />) :
+          <Text style={{ color: 'white', fontFamily: 'Poppins' }}>Upload image to get pill count.</Text>
+        }
+      </View>
 
       {count &&
-        <View>
-          <Text>The model counted {count} pills in the image.</Text>
-          <Button title="Accept result?" onPress={() => {sendCountBack()}} />
+        <View style={styles.results}>
+          <Text style={{ fontFamily: 'Poppins-bold', fontSize: 23 }}>Count: {count}</Text>
+
+          <TouchableOpacity style={styles.button} onPress={() => { sendCountBack() }}>
+            <Text style={styles.buttonText}>Accept Result</Text>
+          </TouchableOpacity>
         </View>
       }
+      
     </View>
 
   );
 };
 
 const styles = StyleSheet.create({
+  controlsContainer: {
+    flexDirection: 'row',
+    margin: 'auto',
+    marginTop: 15,
+    marginBottom: 25,
+    gap: 10
+  },
+  control: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    marginHorizontal: 'auto',
+    width: 100,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#6a9fa8',
+    backgroundColor: 'white',
+  },
+  controlText: {
+    fontFamily: 'Poppins-bold',
+    fontSize: 20,
+    color: '#6a9fa8',
+  },
+  imageContainer: {
+    width: 355,
+    height: 355,
+    margin: 'auto',
+    marginBottom: 15,
+    borderWidth: 5,
+    borderColor: '#6a9fa8',
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   image: {
-    width: 400,
-    height: 400,
+    width: 350,
+    height: 350,
+  },
+  results: {
+    margin: 'auto',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6,
+    paddingHorizontal: 4,
+    marginHorizontal: 'auto',
+    marginTop: 10,
+    width: 175,
+    borderRadius: 6,
+    backgroundColor: '#fdc4b0',
+  },
+  buttonText: {
+    fontFamily: 'Poppins-bold',
+    fontSize: 20,
+    color: 'white',
   },
 });

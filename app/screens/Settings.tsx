@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         marginTop: 25,
         width: 100,
         borderRadius: 6,
-        backgroundColor: '#59c3de',
+        backgroundColor: '#9bc7c3',
     },
     buttonText: {
         fontFamily: 'Poppins-bold',

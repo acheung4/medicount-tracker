@@ -79,20 +79,21 @@ const MedicationList = ({ navigation }: any) => {
 
     const medicationDetails = ({ item }: any) => {
         return (
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate("PrescriptionDetails", { id: item.id })}>
-                <Text>{item.name}</Text>
-                <Text>{item.strength}</Text>
+            <TouchableOpacity style={styles.item} onPress={() => navigation.navigate("PrescriptionDetails", { id: item.id })}>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.strength}>{item.strength}</Text>
             </TouchableOpacity>
         );
     }
 
     return (
-        <View>
+        <View style={styles.container}>
             {medications.length > 0 && (
                 <FlatList
                     data={medications}
                     renderItem={medicationDetails}
                     keyExtractor={(medication) => medication.id}
+                    showsVerticalScrollIndicator={false} 
                 />
             )}
         </View>
@@ -100,14 +101,26 @@ const MedicationList = ({ navigation }: any) => {
 };
 
 const styles = StyleSheet.create({
-    card: {
-        marginVertical: 8,
-        marginHorizontal: 20,
-        padding: 5,
-        borderWidth: 1,
-        borderRadius: 10,
-        backgroundColor: 'white',
-        flex: 1,
-        justifyContent: 'center'
+    container: {
+        marginTop: 25,
+        marginHorizontal: 20
     },
+    item: {
+        borderColor: '#9bc7c3',
+        borderWidth: 2,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        marginBottom: 25,
+        padding: 10
+    },
+    name: {
+        fontFamily: 'Poppins-bold',
+        fontSize: 20,
+        marginLeft: 4
+    },
+    strength: {
+        fontFamily: 'Poppins',
+        fontSize: 18,
+        marginLeft: 4
+    }
 });

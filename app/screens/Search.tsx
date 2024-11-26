@@ -1,6 +1,8 @@
 import { Button, TextInput, View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState } from 'react';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import axios from 'axios';
 import AddMedicationForm from "./AddMedicationForm";
 import PillCounter from "./PillCounter";
@@ -80,6 +82,8 @@ function SearchMedications({ navigation }: any) {
             var uniqueDrugs = drugs.filter((drug, index, self) =>
                 index === self.findIndex((t) => (t.name === drug.name && t.strength === drug.strength)));
 
+            uniqueDrugs.sort((a, b) => a.name.localeCompare(b.name) || parseInt(a.strength.replace(/[^0-9]/g, "")) - parseInt(b.strength.replace(/[^0-9]/g, "")));
+
             setData(uniqueDrugs);
 
         }
@@ -90,18 +94,24 @@ function SearchMedications({ navigation }: any) {
 
     const medicationResult = ({ item }: any) => {
         return (
-            <TouchableOpacity style={styles.result} onPress={() => navigation.navigate("AddMedicationForm", { name: item.name, strength: item.strength })}>
-                <Text>{item.name}</Text>
-                <Text>{item.strength}</Text>
+            <TouchableOpacity style={styles.row} onPress={() => navigation.navigate("AddMedicationForm", { name: item.name, strength: item.strength })}>
+                <Text style={styles.drug}>{item.name.charAt(0).toUpperCase() + item.name.slice(1).toLowerCase()} <Text style={styles.strength}>{item.strength.toLowerCase()}</Text></Text>
+                <Ionicons name="chevron-forward-outline" />
             </TouchableOpacity>
         );
     }
 
+    const ItemSeparator = () => (
+        <View style={styles.separator} />
+    );
+
     return (
         <View style={styles.container}>
             <View style={styles.search}>
-                <TextInput style={styles.input} onChangeText={(text) => setQuery(text)} value={query} placeholder="Enter drug name" />
-                <Button title="Search" onPress={retrieveData} />
+                <TextInput style={styles.searchInput} onChangeText={(text) => setQuery(text)} value={query} placeholder="Enter drug name" />
+                <TouchableOpacity style={styles.searchButton} onPress={retrieveData}>
+                    <MaterialIcons name="search" size={35} color="black" />
+                </TouchableOpacity>
             </View>
 
             <View>
@@ -109,6 +119,7 @@ function SearchMedications({ navigation }: any) {
                     <FlatList
                         data={data}
                         renderItem={medicationResult}
+                        ItemSeparatorComponent={ItemSeparator}
                     />
                 )}
             </View>
@@ -121,26 +132,44 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
     },
     search: {
-        marginVertical: 10,
-        marginHorizontal: 4,
+        marginVertical: 20,
         flexDirection: "row",
-        alignItems: "center"
-    },
-    input: {
-        marginVertical: 10,
-        height: 35,
-        borderWidth: 1,
+        alignItems: "center",
+        backgroundColor: "#d9d8d7",
         borderRadius: 5,
+        paddingLeft: 5
+    },
+    searchButton: {
+        backgroundColor: "#7bb4ad",
+        borderTopRightRadius: 5,
+        borderBottomRightRadius: 5,
+        padding: 4
+    },
+    searchInput: {
+        fontFamily: 'Poppins',
+        height: 45,
         padding: 10,
         flex: 1,
-        backgroundColor: '#fff'
     },
-    result: {
-        backgroundColor: 'orange',
+    row: {
         marginVertical: 5,
-        borderWidth: 1,
-        borderRadius: 5,
-        padding: 5,
-        textAlign: 'center'
+        padding: 10,
+        height: 40,
+        textAlign: 'center',
+        alignItems: 'center',
+        flexDirection: "row"
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'gray'
+    },
+    drug: {
+        fontFamily: 'Poppins-bold',
+        fontSize: 15,
+        flex: 1
+    },
+    strength: {
+        fontFamily: 'Poppins'
     }
+
 });
