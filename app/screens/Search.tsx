@@ -88,7 +88,7 @@ function SearchMedications({ navigation }: any) {
 
         }
         catch (error) {
-            console.error(error);
+            alert("There was an error searching for medications.");
         }
     }
 

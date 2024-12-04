@@ -69,7 +69,7 @@ export default function PillCounter({ navigation, route }: any) {
 
     } catch (error: any) {
       console.log(error.message);
-      //alert("There was an error analyzing the image or the image contained 0 pills");
+      alert("There was an error analyzing the image or the image contained 0 pills");
     }
 
   }
