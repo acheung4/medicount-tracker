@@ -17,6 +17,8 @@ export default function PrescriptionDetails({ route, navigation }: any) {
 
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
+    const disableButton = (data.name === '' || data.strength === '' || data.quantity === '' || data.signature === '' || data.prescriber === '');
+
     useEffect(() => {
 
         const fetchPrescription = async () => {
@@ -85,7 +87,7 @@ export default function PrescriptionDetails({ route, navigation }: any) {
                         )
                         :
                         <View style={styles.item}>
-                            <Text style={[styles.title]}>Drug Name</Text>
+                            <Text style={styles.title}>Drug Name</Text>
                             <Text style={styles.info}>{data.name}</Text>
                         </View>
                     }
@@ -154,11 +156,11 @@ export default function PrescriptionDetails({ route, navigation }: any) {
                     }
 
                     {isEditing ? (
-                        <TouchableOpacity style={styles.button} onPress={() => updateMedication()}>
+                        <TouchableOpacity style={[styles.button, {backgroundColor: disableButton ? 'darkgray' : '#fdc4b0' }]} disabled={disableButton} onPress={() => updateMedication()}>
                             <Text style={styles.buttonText}>Save Changes</Text>
                         </TouchableOpacity>
                     ) : (
-                        <TouchableOpacity style={styles.button} onPress={() => setIsEditing(true)}>
+                        <TouchableOpacity style={[styles.button, {backgroundColor: '#fdc4b0' }]} onPress={() => setIsEditing(true)}>
                             <Text style={styles.buttonText}>Edit Medication</Text>
                         </TouchableOpacity>
                     )}
@@ -210,8 +212,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         marginTop: 50,
         width: 175,
-        borderRadius: 6,
-        backgroundColor: '#fdc4b0',
+        borderRadius: 6
     },
     buttonText: {
         fontFamily: 'Poppins-bold',

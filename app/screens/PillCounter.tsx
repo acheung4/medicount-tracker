@@ -15,9 +15,9 @@ export default function PillCounter({ navigation, route }: any) {
       await ImagePicker.requestCameraPermissionsAsync();
 
       let result = await ImagePicker.launchCameraAsync({
-        cameraType: ImagePicker.CameraType.front,
+        cameraType: ImagePicker.CameraType.back,
         allowsEditing: true,
-        quality: 1,
+        quality: 0.95,
         base64: true
       });
 
@@ -38,7 +38,7 @@ export default function PillCounter({ navigation, route }: any) {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ['images'],
         allowsEditing: true,
-        quality: 1,
+        quality: 0.95,
         base64: true
       });
 
@@ -68,7 +68,8 @@ export default function PillCounter({ navigation, route }: any) {
       setCount(data.predictions.length);
 
     } catch (error: any) {
-      alert("There was an error analyzing the image or the image contained 0 pills");
+      console.log(error.message);
+      //alert("There was an error analyzing the image or the image contained 0 pills");
     }
 
   }

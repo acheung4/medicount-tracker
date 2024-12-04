@@ -50,6 +50,8 @@ export default function AddMedicationForm({ route, navigation }: any) {
         }
     }
 
+    const disableButton = (data.name === '' || data.strength === '' || data.quantity === '' || data.signature === '' || data.prescriber === '');
+
     const navigateToCounter = () => {
         navigation.navigate('PillCounter', {
             onGoBack: (count: number) => {
@@ -93,7 +95,7 @@ export default function AddMedicationForm({ route, navigation }: any) {
                     <Text style={styles.title}>Prescriber</Text>
                     <TextInput style={styles.input} onChangeText={(value) => handleChange(value, "prescriber")} value={data.prescriber} placeholder="Prescriber Name" />
 
-                    <TouchableOpacity style={styles.button} onPress={addMedication}>
+                    <TouchableOpacity style={[styles.button, {backgroundColor: disableButton ? 'darkgray' : '#fdc4b0' }]} disabled={disableButton} onPress={addMedication}>
                         <Text style={styles.buttonText}>Add Medication</Text>
                     </TouchableOpacity>
                 </ScrollView>
@@ -153,8 +155,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         marginTop: 50,
         width: 175,
-        borderRadius: 6,
-        backgroundColor: '#fdc4b0',
+        borderRadius: 6
     },
     buttonText: {
         fontFamily: 'Poppins-bold',

@@ -25,6 +25,8 @@ export default function Login({ navigation }: any) {
         }
     }
 
+    const disableButton = (email === '' || password === '');
+
     return (
         <View style={styles.container}>
             <KeyboardAvoidingView behavior='position'>
@@ -47,7 +49,7 @@ export default function Login({ navigation }: any) {
                 {loading ? <ActivityIndicator style={{ marginTop: 75 }} size="large" color='#fdc4b0' />
                     :
                     <View>
-                        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                        <TouchableOpacity style={[styles.button, {backgroundColor: disableButton ? 'darkgray' : '#fdc4b0' }]} disabled={disableButton} onPress={handleLogin}>
                             <Text style={styles.buttonText}>Login</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ marginTop: 10, marginHorizontal: 'auto' }} onPress={() => navigation.navigate('Register')}>
@@ -101,8 +103,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         marginTop: 75,
         width: 100,
-        borderRadius: 6,
-        backgroundColor: '#fdc4b0',
+        borderRadius: 6
     },
     buttonText: {
         fontFamily: 'Poppins-bold',
